@@ -1,0 +1,125 @@
+import sys; args = sys.argv[1:]
+
+import time, math, random, re
+
+dims = (4,4)
+
+# Main Function
+def aStar(root, goal):
+    if not(isPossible(root, goal)): return(f"{root}: X")
+    if root == goal: return(f"{root}: G")
+    openSet = [(f(root, goal, 0), root, 0)]
+    closedSet = {root: ""}
+    while True:
+        openSet.sort()
+        element = openSet.pop(0)
+        node = element[1]
+        nodeLevel = element[2]
+        for nbr in neighbors(node):
+            if nbr in closedSet: continue
+            closedSet[nbr] = node
+            
+            openSet.append((f(node, goal, nodeLevel+1), nbr, nodeLevel+1))
+            if nbr == goal: 
+                path = [nbr]
+                while node:
+                    path.insert(0, node)
+                    node = closedSet[node]
+                
+                # return path
+                return (f"{root}: {getCondensedPath(path)}")
+# Get Underscore Shift
+def getShift(pzl1, pzl2):
+    width = dims[0]
+    pzl1UndPos = pzl1.find("_")
+    pzl2UndPos = pzl2.find("_")
+
+    pzl1UndPosMod = pzl1UndPos % width
+    pzl2UndPosMod = pzl2UndPos % width
+
+    if pzl1UndPosMod == pzl2UndPosMod:
+        if(pzl2UndPos<pzl1UndPos):
+            return "U"
+        else:
+            return "D"
+    else:
+        if(pzl2UndPos>pzl1UndPos):
+            return "R"
+        else:
+            return "L"
+
+# Get Condensed Path
+def getCondensedPath(puzzles):
+    return "".join([getShift(puzzle, puzzles[idx+1]) for idx, puzzle in enumerate(puzzles[:-1])])
+    # dirs = []
+    # for idx,puzzle in enumerate(puzzles[:-1]):
+    #     dirs.append(get_shift(puzzle, puzzles[idx+1], w))
+
+# Get Neighbors
+def neighbors(puzzle):
+    w, h = dims
+    undInd = puzzle.index('_')
+    col, row = undInd % w, undInd // w
+    neighbors = []
+
+    def is_valid(x, y):
+        return 0 <= x < w and 0 <= y < h
+
+    for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+        new_col, new_row = col + dx, row + dy
+        if is_valid(new_col, new_row):
+            new_undInd = new_row * w + new_col
+            new_puzzle = list(puzzle)
+            new_puzzle[undInd], new_puzzle[new_undInd] = new_puzzle[new_undInd], new_puzzle[undInd]
+            neighbors.append(''.join(new_puzzle))
+
+    return neighbors
+
+# Inversion Count
+def inversionCount(puzzle):
+    count = 0
+    for i in range((l:=len(puzzle))):
+        for j in range(i+1, l):
+            if puzzle[i] != '_' and puzzle[j] != '_' and puzzle[i] > puzzle[j]:
+                count += 1
+    return count
+
+# Is it possible to reach goal from root
+def isPossible(root, goal):
+    icRoot = inversionCount(root)
+    icGoal = inversionCount(goal)
+    return not(icRoot%2!=icGoal%2 and dims[0]%2==1)
+
+# f(x) = h(x) + level(x)
+def f(puzzle, goal, level):
+    return h(puzzle, goal) + level
+
+# Manhattan Distance
+def h(puzzle, goal):
+    return sum(get_tile_MD(tile, puzzle, goal) for tile in puzzle if tile != '_')
+
+# Manhattan Distance Helper Functions
+def get_vertical_dist(tile, root, goal):
+    return abs(root.find(tile) % dims[0] - goal.find(tile) % dims[0])
+
+def get_horizontal_dist(tile, root, goal):
+    return abs(root.find(tile) // dims[1] - goal.find(tile) // dims[1])
+
+def get_tile_MD(tile, root, goal):
+    return get_horizontal_dist(tile, root, goal) + get_vertical_dist(tile, root, goal)
+
+# puzzlesFile = open("input.txt").read().splitlines()
+puzzlesFile = open(args[0]).read().splitlines()
+goal = puzzlesFile[0]
+for start in puzzlesFile:
+    print(aStar(start, goal))
+# start = "KIM_GAFNECLJHBDO"
+# goal = "KILJGAFNH_DMCEBO"
+# path = aStar(start, goal)
+# print(path)
+# print(type(path))
+
+# for i in range(len(path)):
+#     print(f"Start: {path[i]} Goal: {goal} MD: {h(path[i], goal)}")
+
+#Dhruv Chandna Period 6 2025
