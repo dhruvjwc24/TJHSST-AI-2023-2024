@@ -1,0 +1,28 @@
+Submitted scripts should take a single argument of a file name, which file contains slider puzzles (between 50 and 60), one per line, with the first entry being the goal for all of them.  The script should solve each one in turn (starting with the goal), and, for each puzzle, output on a single line:
+
+The puzzle followed by the compact path.
+There are several forms that may be used (stuff and otherStuff are both optional):
+stuff PUZZLE otherStuff: COMPACTPATH
+stuff PUZZLE otherStuff- COMPACTPATH
+stuff PUZZLE otherStuff=> COMPACTPATH
+stuff PUZZLE otherStuff path COMPACTPATH
+stuff PUZZLE COMPACTPATH
+
+The grader will first look to see whether it can find a PUZZLE within the line.  If not, the line is ignored.  If a PUZZLE is found, it will then look to see whether it can find a COMPACTPATH right next to PUZZLE (the final variant) or the COMPACTPATH preceded by a delimiter of :, -, =>, or path.  stuff and otherStuff is ignored and may be used for debugging or formatting purposes.  Three possibilities are:
+
+my puzzle AGBDCFJHIELOM_NK; my path LURULDDRRRULULURDLDRDR
+EAB_IFHDCGOKJMNL DLLDLDRRULURDLLUURRDDRD
+24: BEDHACFGIJKLMNO_ len 24 in 0.016s: ULLUULDRRRULLDDRULURDDRD
+
+COMPACTPATH must be G if the puzzle is the goal, X if the puzzle is not solvable.  Otherwise, it should be a sequence of characters from the alphabet "DRUL", where the letters specify whether the space position is adjusted Down, Right, Up, or Left.
+
+The time allowed is 60 seconds for the entire test.  Each puzzle should be solved, including the very first one, which is the goal.  There will be an unsolvable puzzle somewhere in the 25th to 35th puzzle range.
+
+The following symbols may appear in the
+summary string (if present):
+- Missing puzzle
+! Multiple lines for the same puzzle
+@ Compact path not found
+L Wrong length for compact path
+P Compact path is incorrect
+1 Correct
