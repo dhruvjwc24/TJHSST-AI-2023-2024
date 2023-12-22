@@ -1,0 +1,22 @@
+Solve blocks problems: A rectangle is given that acts as a container (height x width: this orientation  is important).  In addition, a sequence of rectangles is given, which rectangles are to be placed in either a horizontal or vertical orientation in such a way as to fit within the container so that no two rectangles overlap.
+
+The input is given as a sequence of numbers on the command line.  There will be an even number of numbers since they are paired, and the first pair of numbers represents the height and width, respectively, of the rectangle that is acting as the container.  The remaining pairs of numbers give the dimensions of the rectangles to be placed in the container.  Note that the orientation of the all the rectangles except the first does not matter since each may be placed either horizontally or vertically, relative to the container.  Numbers may or may not be separated by 'X' or 'x' symbols, to make reading of the input by humans easier.
+
+If the problem is impossible, the script should print out one of: No solution, Not possible, Impossible, No decomposition
+
+If there is a solution, the output should be in the form of:
+Decomposition: r1h, r1w, r2h, r2w, ...
+The rectangles are listed in the order that they would be encountered if scanning was going from left to right, top to bottom.  The orientation of each encountered rectangle is given by virtue of showing its height and width, in that order.  Non numeric values in the line following the Decomposition keyword will be ignored.
+
+If the rectangles in the input do not completely cover the container, then holes should be introduced.  Holes are 1x1 rectangles and should be specified in the decomposition.  Multiple holes may optionally be combined into a larger, rectangular hole.  Holes are reported in the decomposition in exactly the same way as rectangles that are to be placed.  It is up to the grader to decide whether an element in a decomposition is a rectangle or a hole.
+
+There are 90 seconds per test.  The first several tests should be short, but the later tests will test the efficiency of the submitted script's solution routine.
+
+Example with debugging information.  The only required element is the Decomposition line:
+> python3 myBlockScript.py 5x7 2x4 1x6 5x4
+Area of rects: 34, container: 35
+Dims: (5, 7)
+Raw blocks: [(6, 1), (5, 4), (4, 2), (1, 1)]
+Decomposition: [(1, 6), (1, 1), (4, 5), (4, 2)]
+Recurse ct: 6
+Time: 0.0150s

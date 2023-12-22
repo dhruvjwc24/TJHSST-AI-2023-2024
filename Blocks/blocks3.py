@@ -19,7 +19,7 @@ def updateState(state, block, r, c):
     return state
 
 def bruteForce(state, blocksChoices, choicesMade=None):
-    print2D(state, True)
+    # print2D(state, True)
     if choicesMade is None:
         choicesMade = {}
 
@@ -100,7 +100,8 @@ def area(tup):
 def main():
     global args, STATS_COUNTER
     STATS_COUNTER = {}
-    file = open("/Users/dhruvchandna/Documents/Documents - Jitendra’s MacBook Pro/AI/Blocks/testCases.txt").read().split("\n")
+    file = open("testCases.txt").read().split("\n")
+    # file = open("/Users/dhruvchandna/Documents/Documents - Jitendra’s MacBook Pro/AI/Blocks/testCases.txt").read().split("\n")
     # args = "10 11 10x2 10 2 3X10 2X5 10 1 2x10".split(" ")
     for argsStr in file:
         args = argsStr.split(" ")

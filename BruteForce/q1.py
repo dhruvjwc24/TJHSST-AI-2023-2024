@@ -1,6 +1,5 @@
 import sys; args = sys.argv[1:]
 
-DIM = int(args[0])
 def bruteForce(pzl):
     if isInvalid(pzl): return ""
     if isSolved(pzl): return pzl
@@ -47,7 +46,15 @@ def byRow(pzl):
 def byDiag(pzl):
     return [pzl[0::DIM+1], pzl[DIM-1:-1:DIM-1]]
 
-pzl = "." * DIM**2
-sol = bruteForce(pzl)
-for row in byRow(sol):
-    print(row)
+def main():
+    global DIM
+    args = [4, 5, 6, 7]
+    for arg in args:
+        DIM = arg
+        pzl = "." * DIM**2
+        sol = bruteForce(pzl)
+        for row in byRow(sol):
+            print(row)
+        print()
+
+if __name__ == "__main__": main()
