@@ -115,7 +115,7 @@ def setGlobals(puzzleLen):
 def main():
     global lookupTable, pzlLen, lenData, pzl, STATS_COUNTER
     lookupTable = {}
-    args = ["Sudoku/puzzles.txt"]
+    # args = ["Sudoku/puzzles.txt"]
     STATS_COUNTER = {}
     PZLS = open(args[0]).read().split("\n")
     lenData = None

@@ -20,9 +20,8 @@ def BFS(w, h, start, goal=None):
             if nbr == goal:
                 path = (dctSeen[node] + " " + node + " " + nbr).strip()
                 pathLength = len(path.split(" "))-1
-
                 band = getBand(path, w, h)
-                return(f"{band}\nSteps: {pathLength}\nTime: {str(float('%.3g' % (time.process_time()-startTime)))}s")
+                return(f"{band}\nSteps: {pathLength}\nCondensed Path: {get_directions(path.split(' '), w)}\nTime: {str(float('%.3g' % (time.process_time()-startTime)))}s")
                 
             if nbr not in dctSeen:
                 dctSeen[nbr] = dctSeen[node] + " " + node
@@ -94,18 +93,37 @@ def inversionCount(puzzle):
 def create2D(state, w, h):
     return [state[w*i:w*(i+1)] for i in range(h)]
 
+def get_directions(puzzles, width):
+    dirs = []
+    for idx,puzzle in enumerate(puzzles[:-1]):
+        dirs.append(get_shift(puzzle, puzzles[idx+1], width))
+    return "".join(dirs)
 
-# puzzleStart = args[0]
-# try:
-#     puzzleGoal = args[1]
-# except:
-#     puzzleGoal = ""
-# input = "_12475863" + " "
-input = "RMCfDe5HajV8F42G0I6EQkdi_9XbcSTN7Y13AJghZPLlBOKWUDHEUATA RMCfDe5HajV8F42G0I6EQkdi9_XbcSTN7Y13AJghZPLlBOKWUDHEUATA" + " "
-puzzleStart, puzzleGoal = input.split(" ")[0], input.split(" ")[1]
+def get_shift(pzl1, pzl2, width):
+    pzl1UndPos = pzl1.find("_")
+    pzl2UndPos = pzl2.find("_")
 
-w, h = getDimensions(puzzleStart)
-output = BFS(w, h, puzzleStart, puzzleGoal)
-print(output)
+    pzl1UndPosMod = pzl1UndPos % width
+    pzl2UndPosMod = pzl2UndPos % width
+
+    if pzl1UndPosMod == pzl2UndPosMod:
+        if(pzl2UndPos<pzl1UndPos):
+            return "U"
+        else:
+            return "D"
+    else:
+        if(pzl2UndPos>pzl1UndPos):
+            return "R"
+        else:
+            return "L"
+
+def main():
+    start, puzzles = (f:=open("input.txt").read().split("\n"))[0], f[1:]  
+    w, h = getDimensions(start)
+    for goal in puzzles:
+        print(BFS(w, h, start, goal))
+        print()
+
+if __name__ == "__main__": main()
 
 #Dhruv Chandna Period 6 2025

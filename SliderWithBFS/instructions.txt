@@ -1,0 +1,14 @@
+Have a command line whose first argument is a slider puzzle and whose second (optional) argument is the goal.  If the goal is not provided, then the goal is all of the non-space characters in sorted order followed by the space character.  The underscore character indicates the space.  Thus, the usual 3 x 3 slider default goal is 12345678_
+
+The dimensions of the slider puzzle (H=height) x (W=width) are taken to be such that H <= W and the puzzle is as square as possible.  The script is to output the path according to the format specified below, along with the path length and the time taken.
+
+The path length and time taken are specified on two lines by
+Steps: #
+Time: #s
+where the # is an integer for Steps and a float (or integer) with up to 3 significant figures for time.
+
+The path length when the puzzle and goal are the same is 0.  The path length for the neighbors of puzzle is 1.  The path length is the fewest possible number of moves to get from one given state to the other.  If there is no possible solution, then the path length should be given as -1.
+
+The puzzles should be output as rectangular grids of symbols.  However, anywhere from 5 to 12 puzzles (an arbitrary but fixed constant) should be listed adjacent to each other (constituting a band) for a solution (to cut down on the need for scrolling).  The number of puzzles in the final band may, of course, be less than the chosen constant.  If an impossible puzzle/goal is given or the same puzzle/goal are given, then in both cases the puzzle should be displayed in a band by itself.
+
+The test consists of three sections.  The first section of 30 questions tests for basic functionality.  While 45 seconds are permitted, no more than 10 should be necessary.  The next section of 5 questions tests for simple solutions (5 steps or less) to larger size puzzles (up to 7x7).  The final section does stress testing, allowing 50 seconds for 80 puzzles.
