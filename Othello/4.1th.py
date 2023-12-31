@@ -1,4 +1,5 @@
-import random, sys; args = sys.argv[1:]
+import sys; args = sys.argv[1:]
+import random
 
 def print2D(choicesBoard, spaces=False):
     for i in range(0, 64, 8): print(choicesBoard[i:i+8])
@@ -59,6 +60,7 @@ def extractFromArgs(args):
         if len(arg) == 64: board = arg.lower()
         elif arg.lower() in "xo": token = arg.lower()
         elif arg.lower() == "s": suppress = True
+        elif arg.isdigit(): moves.append(int(arg))
         # else: moves.append(arg.upper())
         else: moves = condenseMoves(arg.upper())
     if board == '': board = '.'*27+'ox......xo'+'.'*27; board = board.lower()
@@ -80,7 +82,8 @@ def display(board, validMoves):
 
 def quickMove(board, token):
     validMoves = findPossibleMoves(board, token)
-    return random.choice(sorted(*validMoves.keys()))
+    if len(validMoves) == 0: return -1
+    return random.choice(sorted(list(validMoves.keys())))
 
 def checkGameOver(board):
     if board.count('x') == 0 or board.count('o') == 0 or board.count('.') == 0: return True
@@ -101,15 +104,9 @@ def condenseMoves(movesStr):
 
 def main():
     global args
-    # print(args)
-    # board = '.'*27+'ox......xo'+'.'*27
-    # token = 'x'
-    # movesStr = args[0]; moves = condenseMoves(movesStr)
-    
-
-    # if len(args) == 0: args = "....................x......xxx....xxxxx.....xo.................. D6 e7".split(" ")
-    # if len(args) == 0: args = "19 34 41".split(" ")
+    # if not args: args = "x.ooxxxox.ooxxooxxooxo.oxxoxxooxxxxxxxxxxxxooxoxxxoxxooxxxxxxxxx".split()
     board, token, suppress, moves = extractFromArgs(args)
+    quickMove(board, token)
     validMoves = findPossibleMoves(board, token)
     if len(validMoves) == 0:
         validMoves = findPossibleMoves(board, getOppositeToken(token))
@@ -137,21 +134,19 @@ def main():
         validMoves = findPossibleMoves(board, token)
         i += 1
     # print(board, token, suppress, moves)
-    while not checkGameOver(board):
-        qm = quickMove(board, token)
-        if not suppress: display(board, findPossibleMoves(board, token))
-        if len(moves) == 0: move = quickMove(board, token)
-        else: move = moves.pop(0)
-        board = makeMove(board, move, findPossibleMoves(board, token), token)
-        token = getOppositeToken(token)
+    # while not checkGameOver(board):
+    #     qm = quickMove(board, token)
+    #     if not suppress: display(board, findPossibleMoves(board, token))
+    #     if len(moves) == 0: move = quickMove(board, token)
+    #     else: move = moves.pop(0)
+    #     board = makeMove(board, move, findPossibleMoves(board, token), token)
+    #     token = getOppositeToken(token)
     # validMoves = findPossibleMoves(board, token)
     # if len(validMoves) == 0:
     #     validMoves = findPossibleMoves(board, getOppositeToken(token))
     #     token = getOppositeToken(token)
     # display(board, validMoves)
     # printPossibleMoves(board, token)
-
-    
 
 if __name__ == "__main__":
     main()
