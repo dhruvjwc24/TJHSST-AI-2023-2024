@@ -61,16 +61,30 @@ def getToken(board):
 def getOppositeToken(token):
     return 'o' if token == 'x' else 'x'
 
+def condenseMoves(movesStr):
+    moves = []
+    while len(movesStr) > 0:
+        move = movesStr[:2]
+        if "-" in move and move[1] != "1": movesStr = movesStr[2:]; continue
+        if "_" in move: moves.append(int(move[1]))
+        else: moves.append(int(move))
+        movesStr = movesStr[2:]
+    return moves
+
 def extractFromArgs(args):
-    board, token, moves = '', '', []
+    board, token, suppress, moves, holeLimit, verbose, noArgs = '', '', False, [], 12, False, False
+    if len(args) == 0: noArgs = True
     for arg in args:
-        if len(arg) == 64: board = arg.lower()
+        if len(arg) == 64 and set(arg.lower()) == {'x', 'o', '.'}: board = arg.lower()
+        elif "HL" in arg: holeLimit = int(arg[2:])
+        elif "v" == arg.lower(): verbose = True
         elif arg.lower() in "xo": token = arg.lower()
-        else: moves.append(arg.upper())
+        elif arg.lower() == "s": suppress = True
+        elif len(arg) <= 2 and (("-" in arg and arg[1] == "1") or arg.isdigit()) : moves.append(int(arg))
+        else: moves += condenseMoves(arg.upper())
     if board == '': board = '.'*27+'ox......xo'+'.'*27; board = board.lower()
     if token == '': token = getToken(board)
-    if moves == '': moves = []
-    return board, token, moves
+    return board, token, suppress, moves, holeLimit, verbose, noArgs
 
 def printPossibleMoves(token):
     validMoves = findPossibleMoves(token)
@@ -88,9 +102,10 @@ def display(board, token, validMoves):
     # print(f"Possible moves for {token}: {', '.join(sorted([str(choice) for choice in validMoves.keys()]))}\n")
 def main():
     global args, board, token, moves, oppositeToken
+    if not args: args = "37292130201123131243_538_219472231_3_4394653101418_9_726_6155445_017_1634455_825323433514152421624506159-25758-260 x".split()
     # if len(args) == 0: args = "..................OOO.....OOO.....OXO......X.................... 11 -2 2".split(" ")
     # if len(args) == 0: args = "19 34 41".split(" ")
-    board, token, moves = extractFromArgs(args)
+    board, token, suppress, moves, holeLimit, verbose, noArgs = extractFromArgs(args)
     validMoves = findPossibleMoves(token)
     if len(validMoves) == 0:
         validMoves = findPossibleMoves(getOppositeToken(token))
@@ -99,11 +114,8 @@ def main():
     display(board, token, validMoves)
     printPossibleMoves(token)
 
-    i = 0
-    while i < len(moves):
-        move = moves[i]
-        moveIdx = convertMoveToIdx(move)
-        if moveIdx == -1: i += 1; continue
+    for moveIdx in moves:
+        if moveIdx == -1: continue
         if len(validMoves) == 0: 
             token = getOppositeToken(token)
             continue
@@ -113,11 +125,9 @@ def main():
         if len(validMoves) == 0: 
             token = getOppositeToken(token)
             validMoves = findPossibleMoves(token)
-        # display(board, oppositeToken, validMoves, moveIdx, True); continue
         display(board, token, validMoves)
         token = printPossibleMoves(getOppositeToken(token))
         validMoves = findPossibleMoves(token)
-        i += 1
         # # if len(validMoves) == 0: print("No moves possible"); return
         # validMovesStr = ", ".join(sorted([str(move) for move in validMoves.keys()]))
         # choicesBoard = board
