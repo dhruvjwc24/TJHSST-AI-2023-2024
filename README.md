@@ -1,1 +1,1 @@
-This is a test readme
+This repository contains my work for labs in an AI course I took. This folders cover a range of topics, from python fundamentals (i.e. list comprehension, slicing, and regex) to algorithmic games to neural networks from scratch. In all topics, a focus on efficiency and speed was stressed. 
