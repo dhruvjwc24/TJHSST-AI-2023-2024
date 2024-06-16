@@ -1,0 +1,45 @@
+This lab is about determining certain words in a dictionary using regular expressions.  The given dictionary has one entry per line.  However, the only entries that should be recognized are "English proper" words, meaning that the word must comprise only the letters a to z.  There may not be any capital letters in it, nor apostrophes, spaces, dashes, nor any other punctuation, nor any letters used only in foreign alphabets, nor letters with diacritical marks (such as a dieresis or tilde).  The supplied dictionary does not have digits, underscores, dashes, or spaces.  However, it does have capital letters, some foreign letters, and apostrophes and those entries should not be recognized as words.
+
+
+The input to the submitted command line script will be an integer in the range [70,79], The script should output a regular expression to determine the specified words.  The grader will read in the dictionary being used as a single, long string and then apply the submitted regular expression to this string (using a modified form of re.findall).  It does not feed each individual entry in the dictionary to the regular expression.  This means that \b can be improved upon and that one must be careful about wrapping to the next line.  The questions are:
+
+
+Find all words ...
+70: ... where each vowel occurs at least once
+71: ... containing exactly 5 vowels
+72: ... with w acting as vowel
+73: ... where if all but the first 3 and last 3 letters are removed, a palindrome results
+74: ... where there is exactly one b and one t, and they are adjacent to each other
+75: ... with the longest contiguous block of one letter
+76: ... with the greatest number of a repeated letter
+77: ... with the greatest number of adjacent pairs of identical letters
+78: ... with the greatest number of consonants
+79: ... where no letter is repeated more than once
+
+
+Except in question 72, vowels are the set {*"aeiou"} and do not include "y" (nor "w").
+In questions 75-78, one must first discover the greatest number or length, and then apply that knowledge to the submitted regex.
+
+The grader will inject fake words into the dictionary.  The fake words will all be at least 3 letters long and contain strictly the characters from a to z (no upper case, no foreign letters, no digits, no apostrophes, underscores, or other punctuation or diacritical marks).  They will be inserted in alphabetical order and will not alter the "greatest number" and "longest contiguous block" sizes found in questions 75-78.  They are also meant to preserve the "spirit" of questions 72 and 73.
+
+
+If the regex matches any portion of a word, then the entire entry from that line is considered matched.  If the regex matches across multiple lines, it is automatically incorrect (ie. the regex should not match on a newline)
+
+
+When a valid regex does not find a word or words it was meant to, then one such word will be displayed.  If it finds something it shouldn't have, then one such find will be displayed.  If both occur, then an unfound entry will be shown first.  If a found or not-found entry was not in the original dictionary on a single line, it is displayed in double quotes.  Thus, fake words and multi-line matches will be shown in double quotes.  It is possible for the same word to appear twice in the output if wrapping happens (which implies the word being looked for was not found because it was in a multi-line match).
+
+It is possible to solve all the problems in a total length of no more than 246.
+
+The internal error codes are:
+W: Regex did not find an entry it should have
+Y: Regex found something it shouldn't have
+H: Both W and Y
+I: Invalid regex
+O: Bad option
+C: Non-ASCII char
+D: No starting delimiter
+E: No ending delimiter
+B: Blank
+M: Missing
+T: Timeout
+E: Script error
